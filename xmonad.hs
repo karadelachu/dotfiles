@@ -1,11 +1,15 @@
---
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
---
+--  _  __                   _      _            _           
+-- | |/ /__ _ _ __ __ _  __| | ___| | __ _  ___| |__  _   _ 
+-- | ' // _` | '__/ _` |/ _` |/ _ \ |/ _` |/ __| '_ \| | | |
+-- | . \ (_| | | | (_| | (_| |  __/ | (_| | (__| | | | |_| |
+-- |_|\_\__,_|_|  \__,_|\__,_|\___|_|\__,_|\___|_| |_|\__,_|
+-- __  ____  __                       _ 
+--  \ \/ /  \/  | ___  _ __   __ _  __| |
+--   \  /| |\/| |/ _ \| '_ \ / _` |/ _` |
+--   /  \| |  | | (_) | | | | (_| | (_| |
+--  /_/\_\_|  |_|\___/|_| |_|\__,_|\__,_|
+-----------------------------------------------------------
+------------------------------------------------------------
 
 import XMonad
 import Data.Monoid
@@ -13,10 +17,12 @@ import System.Exit
 import XMonad.Util.SpawnOnce
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+import XMonad.Layout.BinarySpacePartition
 
--- The preferred terminal program, which is used in a binding below and by
--- certain contrib modules.
+-- Variables.
 --
+
+-- My preferred terminal.
 myTerminal      = "kitty"
 
 -- Whether focus follows the mouse pointer.
@@ -28,39 +34,25 @@ myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
 -- Width of the window border in pixels.
---
-myBorderWidth   = 1
+myBorderWidth   = 2
 
--- modMask lets you specify which modkey you want to use. The default
--- is mod1Mask ("left alt").  You may also consider using mod3Mask
--- ("right alt"), which does not conflict with emacs keybindings. The
--- "windows key" is usually mod4Mask.
---
+-- The mod key that I use.
 myModMask       = mod4Mask
 
--- The default number of workspaces (virtual screens) and their names.
--- By default we use numeric strings, but any string may be used as a
--- workspace name. The number of workspaces is determined by the length
--- of this list.
---
--- A tagging example:
---
--- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
---
+-- Names of workspaces.
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 
 -- Border colors for unfocused and focused windows, respectively.
---
-myNormalBorderColor  = "#dddddd"
-myFocusedBorderColor = "#ff0000"
+myNormalBorderColor  = "#282A36"
+myFocusedBorderColor = "#6272A4"
 
 ------------------------------------------------------------------------
--- Key bindings. Add, modify or remove key bindings here.
+-- Key bindings.
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
-    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+    [ ((modm,               xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10'")
@@ -69,16 +61,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_q     ), kill)
 
      -- Rotate through the available layout algorithms
-    , ((modm,               xK_space ), sendMessage NextLayout)
+    , ((modm,               xK_Tab ), sendMessage NextLayout)
 
     --  Reset the layouts on the current workspace to default
-    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+    , ((modm .|. shiftMask, xK_Tab ), setLayout $ XMonad.layoutHook conf)
 
     -- Resize viewed windows to the correct size
     , ((modm,               xK_n     ), refresh)
-
-    -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
 
     -- Move focus to the next window
     , ((modm,               xK_j     ), windows W.focusDown)
@@ -90,7 +79,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_m     ), windows W.focusMaster  )
 
     -- Swap the focused window and the master window
-    , ((modm,               xK_Return), windows W.swapMaster)
+    , ((modm,               xK_y), windows W.swapMaster)
 
     -- Swap the focused window with the next window
     , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
@@ -114,9 +103,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
 
     -- Toggle the status bar gap
-    -- Use this binding with avoidStruts from Hooks.ManageDocks.
-    -- See also the statusBar function from Hooks.DynamicLog.
-    --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
@@ -178,7 +164,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = tiled ||| Mirror tiled ||| Full
+myLayout = tiled ||| Mirror tiled ||| Full ||| emptyBSP
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
