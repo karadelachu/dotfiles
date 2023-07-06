@@ -1,7 +1,8 @@
 #!/bin/sh
 
 nitrogen --restore &
-picom &
 lxsession &
-Discord &
+murmurd &
+discord &
+element-desktop &
 

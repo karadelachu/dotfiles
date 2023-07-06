@@ -20,8 +20,10 @@ import os
 import subprocess
 
 mod = "mod4"
-terminal = "kitty"
-
+alt = "mod1"
+terminal = "alacritty"
+planner = "alacritty -e 'dooit'"
+manager = "alacritty -e 'ranger'"
 
 keys = [
     
@@ -88,6 +90,14 @@ keys = [
         lazy.spawn(terminal),
         desc="Launch terminal"
         ),
+    Key([mod], "o",
+        lazy.spawn(planner),
+        desc="Launch planner"
+        ),
+    Key([mod], "m",
+        lazy.spawn(manager),
+        desc="Launch file manager"
+        ),
     Key([mod], "Home",
         lazy.spawn("flameshot gui"),
         desc="Take a screenshot"
@@ -121,12 +131,44 @@ keys = [
         desc="Shutdown Qtile"
         ),
     Key([mod], "p",
-        lazy.spawn("dmenu_run -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10'"),
+        lazy.spawn("dmenu_run -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'ubuntu-11'"),
         desc="Spawn a command using dmenu"
+        ),
+    Key([alt, "control"], "1",
+        lazy.spawn("play /home/karadelachu/SoundBoard/Humiliation.mp3"),
+        desc="Soundboard 1"
+        ),
+    Key([alt, "control"], "2",
+        lazy.spawn("play /home/karadelachu/SoundBoard/Denied.mp3"),
+        desc="Soundboard 2"
+        ),
+    Key([alt, "control"], "3",
+        lazy.spawn("play /home/karadelachu/SoundBoard/Melodi1.mp3"),
+        desc="Soundboard 3"
+        ),
+    Key([alt, "control"], "4",
+        lazy.spawn("play /home/karadelachu/SoundBoard/HolyShit.mp3"),
+        desc="Soundboard 4"
+        ),
+    Key([alt, "control"], "5",
+        lazy.spawn("play /home/karadelachu/SoundBoard/Demoman-Earrape-Laugh.mp3"),
+        desc="Soundboard 5"
+        ),
+    Key([alt, "control"], "6",
+        lazy.spawn("play /home/karadelachu/SoundBoard/Augh.mp3"),
+        desc="Soundboard 6"
+        ),
+    Key([alt, "control"], "7",
+        lazy.spawn("play /home/karadelachu/SoundBoard/Stroking.mp3"),
+        desc="Soundboard 7"
+        ),
+    Key([alt, "control"], "9",
+        lazy.spawn("play /home/karadelachu/SoundBoard/YouShouldKillYourselfNow.mp3"),
+        desc="Soundboard 9"
         ),
 ]
 
-groups = [Group(i) for i in "123456789"]
+groups = [Group(i) for i in "1234567890"]
 
 for i in groups:
     keys.extend([
@@ -177,7 +219,7 @@ screens = [
                 widget.Sep(background='282a36', padding=10, linewidth=1),
                 widget.Systray(background='282a36', ),
                 widget.Sep(background='282a36', padding=10, linewidth=1),
-                widget.Clock(background='282a36', format='%Y-%m-%d %a %I:%M %p'),
+                widget.Clock(background='282a36', format='%d-%m-%Y %a %I:%M %p'),
                 #widget.QuickExit(),
             ],
             20,
